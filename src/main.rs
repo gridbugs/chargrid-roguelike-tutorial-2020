@@ -1,4 +1,5 @@
 use coord_2d::{Coord, Size};
+use direction::CardinalDirection;
 use rgb24::Rgb24;
 
 fn main() {
@@ -32,13 +33,34 @@ fn main() {
 }
 
 struct AppData {
+    screen_size: Size,
     player_coord: Coord,
 }
 
 impl AppData {
     fn new(screen_size: Size) -> Self {
         Self {
+            screen_size,
             player_coord: screen_size.to_coord().unwrap() / 2,
+        }
+    }
+    fn maybe_move_player(&mut self, direction: CardinalDirection) {
+        let new_player_coord = self.player_coord + direction.coord();
+        if new_player_coord.is_valid(self.screen_size) {
+            self.player_coord = new_player_coord;
+        }
+    }
+    fn handle_input(&mut self, input: chargrid::input::Input) {
+        use chargrid::input::{Input, KeyboardInput};
+        match input {
+            Input::Keyboard(key) => match key {
+                KeyboardInput::Left => self.maybe_move_player(CardinalDirection::West),
+                KeyboardInput::Right => self.maybe_move_player(CardinalDirection::East),
+                KeyboardInput::Up => self.maybe_move_player(CardinalDirection::North),
+                KeyboardInput::Down => self.maybe_move_player(CardinalDirection::South),
+                _ => (),
+            },
+            _ => (),
         }
     }
 }
@@ -86,7 +108,10 @@ impl chargrid::app::App for App {
             Input::Keyboard(keys::ETX) | Input::Keyboard(keys::ESCAPE) => {
                 Some(chargrid::app::ControlFlow::Exit)
             }
-            _ => None,
+            other => {
+                self.data.handle_input(other);
+                None
+            }
         }
     }
     fn on_frame<F, C>(

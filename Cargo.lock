@@ -213,6 +213,7 @@ dependencies = [
  "chargrid",
  "chargrid_graphical",
  "coord_2d",
+ "direction",
  "rgb24",
 ]
 
@@ -572,6 +573,15 @@ dependencies = [
  "darling_core",
  "quote",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "direction"
+version = "0.18.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "925bba9d6b6393108f00b69c0a0798bb5e3ca8fd077c06e6e89c015e85d02ec4"
+dependencies = [
+ "coord_2d",
 ]
 
 [[package]]

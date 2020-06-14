@@ -141,6 +141,7 @@ dependencies = [
  "chargrid",
  "chargrid_graphical",
  "coord_2d",
+ "direction",
  "rgb24",
 ]
 
@@ -389,6 +390,15 @@ dependencies = [
  "proc-macro2 1.0.18",
  "quote 1.0.7",
  "syn",
+]
+
+[[package]]
+name = "direction"
+version = "0.17.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2428febe49a97ac5371873840ab6b4c88aa78b9914d4ea2d580fe0050f047867"
+dependencies = [
+ "coord_2d",
 ]
 
 [[package]]

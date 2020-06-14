@@ -10,3 +10,5 @@ lto = true
 [dependencies]
 chargrid_graphical = "0.2"
 chargrid = "0.1"
+coord_2d = "0.2"
+rgb24 = "0.2"

@@ -212,6 +212,8 @@ version = "0.1.0"
 dependencies = [
  "chargrid",
  "chargrid_graphical",
+ "coord_2d",
+ "rgb24",
 ]
 
 [[package]]

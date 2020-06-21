@@ -54,7 +54,7 @@ impl<'a> View<&'a AppData> for AppView {
                     .with_character('@')
                     .with_foreground(Rgb24::new_grey(255)),
             };
-            frame.set_cell_relative(entity_to_render.coord, 0, view_cell, context);
+            frame.set_cell_relative(entity_to_render.location.coord, 0, view_cell, context);
         }
     }
 }

@@ -1,4 +1,4 @@
-use crate::game::{GameState, Tile};
+use crate::game::{GameState, Layer, Tile};
 use chargrid::{
     app::{App as ChargridApp, ControlFlow},
     input::{keys, Input, KeyboardInput},
@@ -53,8 +53,22 @@ impl<'a> View<&'a AppData> for AppView {
                 Tile::Player => ViewCell::new()
                     .with_character('@')
                     .with_foreground(Rgb24::new_grey(255)),
+                Tile::Floor => ViewCell::new()
+                    .with_character('.')
+                    .with_foreground(Rgb24::new_grey(63))
+                    .with_background(Rgb24::new(0, 0, 63)),
+                Tile::Wall => ViewCell::new()
+                    .with_character('#')
+                    .with_foreground(Rgb24::new(0, 63, 63))
+                    .with_background(Rgb24::new(63, 127, 127)),
             };
-            frame.set_cell_relative(entity_to_render.location.coord, 0, view_cell, context);
+            let depth = match entity_to_render.location.layer {
+                None => -1,
+                Some(Layer::Floor) => 0,
+                Some(Layer::Feature) => 1,
+                Some(Layer::Character) => 2,
+            };
+            frame.set_cell_relative(entity_to_render.location.coord, depth, view_cell, context);
         }
     }
 }

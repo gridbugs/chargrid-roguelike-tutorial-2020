@@ -22,6 +22,11 @@ pub struct GameState {
     player_entity: Entity,
 }
 
+pub struct EntityToRender {
+    pub tile: Tile,
+    pub coord: Coord,
+}
+
 impl GameState {
     fn spawn_player(&mut self, coord: Coord) {
         self.components.coord.insert(self.player_entity, coord);
@@ -55,11 +60,12 @@ impl GameState {
             *player_coord = new_player_coord;
         }
     }
-    pub fn player_coord(&self) -> Coord {
-        *self
-            .components
-            .coord
-            .get(self.player_entity)
-            .expect("player has no coord component")
+    pub fn entities_to_render<'a>(&'a self) -> impl 'a + Iterator<Item = EntityToRender> {
+        let tile_component = &self.components.tile;
+        let coord_component = &self.components.coord;
+        tile_component.iter().filter_map(move |(entity, &tile)| {
+            let coord = coord_component.get(entity).cloned()?;
+            Some(EntityToRender { tile, coord })
+        })
     }
 }

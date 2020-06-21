@@ -142,6 +142,7 @@ dependencies = [
  "chargrid_graphical",
  "coord_2d",
  "direction",
+ "entity_table",
  "rgb24",
 ]
 
@@ -427,6 +428,12 @@ name = "either"
 version = "1.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bb1f6b1ce1c140482ea30ddd3335fc0024ac7ee112895426e0a629a6c20adfe3"
+
+[[package]]
+name = "entity_table"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a6a5856d0411639d7c7174e6ae6686f69fed93b9c3a6a9c22fc9342d91060483"
 
 [[package]]
 name = "foreign-types"

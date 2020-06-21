@@ -214,6 +214,7 @@ dependencies = [
  "chargrid_graphical",
  "coord_2d",
  "direction",
+ "entity_table",
  "rgb24",
 ]
 
@@ -634,6 +635,12 @@ name = "equivalent"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
+
+[[package]]
+name = "entity_table"
+version = "0.2.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "307e0dceba564133805a19e82c2366c87ab797112aaa08ecb79597e00d6fc1ed"
 
 [[package]]
 name = "external-memory"

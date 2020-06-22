@@ -215,6 +215,7 @@ dependencies = [
  "coord_2d",
  "direction",
  "entity_table",
+ "grid_2d",
  "rgb24",
  "spatial_table",
 ]

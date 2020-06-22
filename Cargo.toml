@@ -11,6 +11,7 @@ lto = true
 chargrid_graphical = "0.2"
 chargrid = "0.1"
 coord_2d = "0.2"
+grid_2d = "0.14"
 rgb24 = "0.2"
 direction = "0.17"
 entity_table = "0.2"

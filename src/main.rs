@@ -4,6 +4,7 @@ use coord_2d::Size;
 
 mod app;
 mod game;
+mod terrain;
 
 fn main() {
     const CELL_SIZE_PX: f64 = 24.;

@@ -59,9 +59,25 @@ impl Room {
     }
 }
 
+// carve out an L-shaped corridor between a pair of coordinates
+fn carve_corridor(start: Coord, end: Coord, grid: &mut Grid<Option<TerrainTile>>) {
+    for i in start.x.min(end.x)..=start.x.max(end.x) {
+        let cell = grid.get_checked_mut(Coord { x: i, ..start });
+        if *cell == None || *cell == Some(TerrainTile::Wall) {
+            *cell = Some(TerrainTile::Floor);
+        }
+    }
+    for i in start.y.min(end.y)..start.y.max(end.y) {
+        let cell = grid.get_checked_mut(Coord { y: i, ..end });
+        if *cell == None || *cell == Some(TerrainTile::Wall) {
+            *cell = Some(TerrainTile::Floor);
+        }
+    }
+}
+
 pub fn generate_dungeon<R: Rng>(size: Size, rng: &mut R) -> Grid<TerrainTile> {
     let mut grid = Grid::new_copy(size, None);
-    let mut player_placed = false;
+    let mut room_centres = Vec::new();
 
     // Attempt to add a room a constant number of times
     const NUM_ATTEMPTS: usize = 100;
@@ -76,11 +92,18 @@ pub fn generate_dungeon<R: Rng>(size: Size, rng: &mut R) -> Grid<TerrainTile> {
             let room_centre = room.centre();
 
             // Add the player to the centre of the room if it's the first room
-            if !player_placed {
+            if room_centres.is_empty() {
                 *grid.get_checked_mut(room_centre) = Some(TerrainTile::Player);
-                player_placed = true;
             }
+
+            // Build up a list of all room centres for use in constructing corridors
+            room_centres.push(room_centre);
         }
+    }
+
+    // Add corridors connecting every adjacent pair of room centres
+    for window in room_centres.windows(2) {
+        carve_corridor(window[0], window[1], &mut grid);
     }
 
     grid.map(|t| t.unwrap_or(TerrainTile::Wall))

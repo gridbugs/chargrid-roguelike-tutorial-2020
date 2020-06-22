@@ -2,6 +2,8 @@ use crate::terrain::{self, TerrainTile};
 use coord_2d::{Coord, Size};
 use direction::CardinalDirection;
 use entity_table::{Entity, EntityAllocator};
+use rand::{Rng, SeedableRng};
+use rand_isaac::Isaac64Rng;
 
 #[derive(Clone, Copy, Debug)]
 pub enum Tile {
@@ -84,8 +86,8 @@ impl GameState {
             .tile
             .insert(self.player_entity, Tile::Player);
     }
-    fn populate(&mut self) {
-        let terrain = terrain::generate_dungeon(self.screen_size);
+    fn populate<R: Rng>(&mut self, rng: &mut R) {
+        let terrain = terrain::generate_dungeon(self.screen_size, rng);
         for (coord, &terrain_tile) in terrain.enumerate() {
             match terrain_tile {
                 TerrainTile::Player => {
@@ -112,7 +114,8 @@ impl GameState {
             spatial_table,
             player_entity,
         };
-        game_state.populate();
+        let mut rng = Isaac64Rng::from_entropy();
+        game_state.populate(&mut rng);
         game_state
     }
     pub fn maybe_move_player(&mut self, direction: CardinalDirection) {

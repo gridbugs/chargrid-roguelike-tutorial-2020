@@ -219,6 +219,7 @@ dependencies = [
  "rand 0.8.5",
  "rand_isaac",
  "rgb24",
+ "shadowcast",
  "spatial_table",
 ]
 
@@ -1745,6 +1746,17 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.104",
+]
+
+[[package]]
+name = "shadowcast"
+version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4418a6cfbc94fff774e1d58649246b54eab9d4d762321a8433fb270cc5c072d5"
+dependencies = [
+ "coord_2d",
+ "direction",
+ "num-traits",
 ]
 
 [[package]]

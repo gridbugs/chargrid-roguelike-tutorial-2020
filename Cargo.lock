@@ -147,6 +147,7 @@ dependencies = [
  "rand",
  "rand_isaac",
  "rgb24",
+ "shadowcast",
  "spatial_table",
 ]
 
@@ -1359,6 +1360,17 @@ name = "serde"
 version = "1.0.114"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5317f7588f0a5078ee60ef675ef96735a1442132dc645eb1d12c018620ed8cd3"
+
+[[package]]
+name = "shadowcast"
+version = "0.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c669951db7d66281857fe265777a847de59da6e19841975505ad386973a237cb"
+dependencies = [
+ "coord_2d",
+ "direction",
+ "num-traits",
+]
 
 [[package]]
 name = "slab"

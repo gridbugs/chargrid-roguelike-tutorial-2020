@@ -1,4 +1,5 @@
 use crate::game::GameState;
+use crate::visibility::CellVisibility;
 use crate::world::{Layer, Tile};
 use chargrid::{
     app::{App as ChargridApp, ControlFlow},
@@ -31,6 +32,7 @@ impl AppData {
             },
             _ => (),
         }
+        self.game_state.update_visibility();
     }
 }
 
@@ -42,6 +44,38 @@ impl AppView {
     }
 }
 
+fn currently_visible_view_cell_of_tile(tile: Tile) -> ViewCell {
+    match tile {
+        Tile::Player => ViewCell::new()
+            .with_character('@')
+            .with_foreground(Rgb24::new_grey(255)),
+        Tile::Floor => ViewCell::new()
+            .with_character('.')
+            .with_foreground(Rgb24::new_grey(63))
+            .with_background(Rgb24::new(0, 0, 63)),
+        Tile::Wall => ViewCell::new()
+            .with_character('#')
+            .with_foreground(Rgb24::new(0, 63, 63))
+            .with_background(Rgb24::new(63, 127, 127)),
+    }
+}
+
+fn previously_visible_view_cell_of_tile(tile: Tile) -> ViewCell {
+    match tile {
+        Tile::Player => ViewCell::new()
+            .with_character('@')
+            .with_foreground(Rgb24::new_grey(255)),
+        Tile::Floor => ViewCell::new()
+            .with_character('.')
+            .with_foreground(Rgb24::new_grey(63))
+            .with_background(Rgb24::new_grey(0)),
+        Tile::Wall => ViewCell::new()
+            .with_character('#')
+            .with_foreground(Rgb24::new_grey(63))
+            .with_background(Rgb24::new_grey(0)),
+    }
+}
+
 impl<'a> View<&'a AppData> for AppView {
     fn view<F: Frame, C: ColModify>(
         &mut self,
@@ -50,18 +84,14 @@ impl<'a> View<&'a AppData> for AppView {
         frame: &mut F,
     ) {
         for entity_to_render in data.game_state.entities_to_render() {
-            let view_cell = match entity_to_render.tile {
-                Tile::Player => ViewCell::new()
-                    .with_character('@')
-                    .with_foreground(Rgb24::new_grey(255)),
-                Tile::Floor => ViewCell::new()
-                    .with_character('.')
-                    .with_foreground(Rgb24::new_grey(63))
-                    .with_background(Rgb24::new(0, 0, 63)),
-                Tile::Wall => ViewCell::new()
-                    .with_character('#')
-                    .with_foreground(Rgb24::new(0, 63, 63))
-                    .with_background(Rgb24::new(63, 127, 127)),
+            let view_cell = match entity_to_render.visibility {
+                CellVisibility::Currently => {
+                    currently_visible_view_cell_of_tile(entity_to_render.tile)
+                }
+                CellVisibility::Previously => {
+                    previously_visible_view_cell_of_tile(entity_to_render.tile)
+                }
+                CellVisibility::Never => ViewCell::new(),
             };
             let depth = match entity_to_render.location.layer {
                 None => -1,

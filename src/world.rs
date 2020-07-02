@@ -1,7 +1,7 @@
 use crate::terrain::{self, TerrainTile};
 use coord_2d::{Coord, Size};
 use direction::CardinalDirection;
-use entity_table::{Entity, EntityAllocator};
+use entity_table::{ComponentTable, Entity, EntityAllocator};
 use rand::Rng;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -56,6 +56,7 @@ pub struct World {
 
 pub struct Populate {
     pub player_entity: Entity,
+    pub ai_state: ComponentTable<()>,
 }
 
 impl World {
@@ -127,6 +128,7 @@ impl World {
     pub fn populate<R: Rng>(&mut self, rng: &mut R) -> Populate {
         let terrain = terrain::generate_dungeon(self.spatial_table.grid_size(), rng);
         let mut player_entity = None;
+        let mut ai_state = ComponentTable::default();
         for (coord, &terrain_tile) in terrain.enumerate() {
             match terrain_tile {
                 TerrainTile::Player => {
@@ -139,13 +141,15 @@ impl World {
                     self.spawn_wall(coord);
                 }
                 TerrainTile::Npc(npc_type) => {
-                    self.spawn_npc(coord, npc_type);
+                    let entity = self.spawn_npc(coord, npc_type);
                     self.spawn_floor(coord);
+                    ai_state.insert(entity, ());
                 }
             }
         }
         Populate {
             player_entity: player_entity.unwrap(),
+            ai_state,
         }
     }
     pub fn maybe_move_character(&mut self, character_entity: Entity, direction: CardinalDirection) {
@@ -156,7 +160,11 @@ impl World {
         let new_player_coord = player_coord + direction.coord();
         if new_player_coord.is_valid(self.spatial_table.grid_size()) {
             let dest_layers = self.spatial_table.layers_at_checked(new_player_coord);
-            if dest_layers.character.is_none() && dest_layers.feature.is_none() {
+            if let Some(character) = dest_layers.character {
+                if let Some(npc_type) = self.components.npc_type.get(character) {
+                    println!("You harmlessly bump into the {}.", npc_type.name());
+                }
+            } else if dest_layers.feature.is_none() {
                 self.spatial_table
                     .update_coord(character_entity, new_player_coord)
                     .unwrap();
@@ -177,5 +185,8 @@ impl World {
         } else {
             0
         }
+    }
+    pub fn npc_type(&self, entity: Entity) -> Option<NpcType> {
+        self.components.npc_type.get(entity).cloned()
     }
 }

@@ -1,6 +1,6 @@
 use crate::world::NpcType;
 use grid_2d::{Coord, Grid, Size};
-use rand::Rng;
+use rand::{seq::IteratorRandom, seq::SliceRandom, Rng};
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum TerrainTile {
@@ -59,6 +59,22 @@ impl Room {
             }
         }
     }
+
+    // Place `n` randomly chosen NPCs at random positions within the room
+    fn place_npcs<R: Rng>(&self, n: usize, grid: &mut Grid<Option<TerrainTile>>, rng: &mut R) {
+        for coord in self
+            .coords()
+            .filter(|&coord| grid.get_checked(coord).unwrap() == TerrainTile::Floor)
+            .choose_multiple(rng, n)
+        {
+            let npc_type = if rng.gen_range(0..100) < 80 {
+                NpcType::Orc
+            } else {
+                NpcType::Troll
+            };
+            *grid.get_checked_mut(coord) = Some(TerrainTile::Npc(npc_type));
+        }
+    }
 }
 
 // carve out an L-shaped corridor between a pair of coordinates
@@ -81,6 +97,8 @@ pub fn generate_dungeon<R: Rng>(size: Size, rng: &mut R) -> Grid<TerrainTile> {
     let mut grid = Grid::new_copy(size, None);
     let mut room_centres = Vec::new();
 
+    const NPCS_PER_ROOM_DISTRIBUTION: &[usize] = &[0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4];
+
     // Attempt to add a room a constant number of times
     const NUM_ATTEMPTS: usize = 100;
     for _ in 0..NUM_ATTEMPTS {
@@ -100,6 +118,10 @@ pub fn generate_dungeon<R: Rng>(size: Size, rng: &mut R) -> Grid<TerrainTile> {
 
             // Build up a list of all room centres for use in constructing corridors
             room_centres.push(room_centre);
+
+            // Add npcs to the room
+            let &num_npcs = NPCS_PER_ROOM_DISTRIBUTION.choose(rng).unwrap();
+            room.place_npcs(num_npcs, &mut grid, rng);
         }
     }
 

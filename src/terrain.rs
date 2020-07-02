@@ -1,3 +1,4 @@
+use crate::world::NpcType;
 use grid_2d::{Coord, Grid, Size};
 use rand::Rng;
 
@@ -6,6 +7,7 @@ pub enum TerrainTile {
     Player,
     Floor,
     Wall,
+    Npc(NpcType),
 }
 
 // A rectangular area of the map

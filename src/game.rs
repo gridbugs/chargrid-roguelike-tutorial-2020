@@ -71,7 +71,7 @@ impl GameState {
     }
     fn ai_turn(&mut self) {
         for (entity, ()) in self.ai_state.iter_mut() {
-            let npc_type = self.world.npc_type(entity).unwrap();
+            let npc_type = self.world.components.npc_type.get(entity).unwrap();
             println!("The {} ponders its existence.", npc_type.name());
         }
     }

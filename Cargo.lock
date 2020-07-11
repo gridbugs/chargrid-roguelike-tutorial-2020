@@ -217,6 +217,7 @@ dependencies = [
  "entity_table",
  "grid_2d",
  "grid_search_cardinal",
+ "line_2d",
  "meap",
  "rand 0.8.5",
  "rand_isaac",
@@ -1011,9 +1012,9 @@ dependencies = [
 
 [[package]]
 name = "grid_search_cardinal"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e47ad0f3cbfe30e6094901b74a4592bca5b0d741b4ffc24c294fb42aeb101046"
+checksum = "e02a5d0de0dae44e6f95842bf3cd0ab5965b3576500b1910c2f694f6352e0855"
 dependencies = [
  "grid_search_cardinal_best",
  "grid_search_cardinal_distance_map",
@@ -1022,9 +1023,9 @@ dependencies = [
 
 [[package]]
 name = "grid_search_cardinal_best"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4d2cdab27e1aacc858325ed886d549d5e877c33d73eff11142c1b5abbc4a276d"
+checksum = "0bed45225eadf55498044c1e1b7fec87a59f501eb8fe07096e09d88c55b44fff"
 dependencies = [
  "coord_2d",
  "direction",
@@ -1033,9 +1034,9 @@ dependencies = [
 
 [[package]]
 name = "grid_search_cardinal_common"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5bb3c749643f0f72e13d439c92fe516f6f4d506cac0cc1107e45772fe5596abb"
+checksum = "cab2cde22797735e9fdc910a91d607651f4b494ac8eb09a5f97c447a976e2050"
 dependencies = [
  "direction",
  "grid_2d",
@@ -1043,9 +1044,9 @@ dependencies = [
 
 [[package]]
 name = "grid_search_cardinal_distance_map"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d8370e43eedd0ed39b5cd248c57564e843ac19416841ffc4478c3f32458afc84"
+checksum = "d4acb568ca70c78e6b8839cd29f410a1cf0b8aa4820248adbee8810e48f3b78c"
 dependencies = [
  "direction",
  "grid_2d",
@@ -1054,9 +1055,9 @@ dependencies = [
 
 [[package]]
 name = "grid_search_cardinal_point_to_point"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d46942b134594cf4a415f497c7a6cb29b7d320d5c6cf717f867053be9ed5e433"
+checksum = "2f4a1890cd7f97c6f671b31b794b682b1651c6b6f79e6be29c4071ab4d8524d0"
 dependencies = [
  "coord_2d",
  "direction",
@@ -1201,6 +1202,17 @@ checksum = "07033963ba89ebaf1584d767badaa2e8fcec21aedea6b8c0346d487d49c28667"
 dependencies = [
  "cfg-if 1.0.1",
  "windows-targets 0.53.2",
+]
+
+[[package]]
+name = "line_2d"
+version = "0.5.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e34ec579bd0a49fc9aa9b40233b19f618399b5dff3a03cbe4c298a8159e62e5a"
+dependencies = [
+ "coord_2d",
+ "direction",
+ "either",
 ]
 
 [[package]]
